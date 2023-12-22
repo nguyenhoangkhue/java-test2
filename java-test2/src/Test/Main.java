@@ -21,13 +21,15 @@ public class Main {
 
         convertObjectToJsonFile("list-user.json", arrUser);
 
+        int options=0;
         boolean isQuit = false;
         while (!isQuit) {
-            System.out.println("Nhập lựa 1 trong các lựa trọn");
             System.out.println("Enter 1: Đăng nhập");
             System.out.println("Enter 2: Đăng ký");
             System.out.println("Enter 3: Quên mật khẩu");
-            int options = sc.nextInt();
+            System.out.println("Nhập lựa 1 trong các lựa trọn");
+            options = sc.nextInt();
+            sc.nextLine();
             switch (options) {
                 case 1: {
                     System.out.println("Nhập email");
@@ -40,9 +42,10 @@ public class Main {
                         ObjectInputStream ois=new ObjectInputStream(is);
 
                         User userData=(User) ois.readObject();
-                        System.out.println(userData.getEmail());
-                        for (int i=0;i<arrUser.size();i++){
-                            if (arrUser.get(i).getEmail().equals(email)&&arrUser.get(i).getPassword().equals(password)){
+                        ArrayList<String> emailData=new ArrayList<>();
+                        emailData.add(userData.getEmail());
+                        for (int i=0;i<emailData.size();i++){
+                            if (emailData.get(i).equals(email)&&emailData.get(i).equals(password)){
                                 while(true){
                                     System.out.println("Chào mừng "+userData.getUsername()+ ", bạn có thể thực hiện các công việc sau:");
                                     System.out.println("Enter a: Thay đổi username");
@@ -73,11 +76,16 @@ public class Main {
                                         case"c":{
                                             System.out.println("Nhập password mới");
                                             String changedPassword=sc.nextLine();
-                                            System.out.println("Đã thay đổi email thành: "+changedPassword);
+                                            if (changedPassword.length()>=7&&changedPassword.length()<=15){
+                                                System.out.println("Đã thay đổi email thành: "+changedPassword);
+                                            }else {
+                                                System.out.println("password không hợp lệ mời nhập lại");
+                                            }
                                             break;
                                         }
                                         case"d":{
-                                            System.out.println(options);
+                                            isQuit = false;
+                                            break;
                                         }
                                         case"e":{
                                             isQuit = true;
@@ -100,24 +108,42 @@ public class Main {
                     break;
                 }
                 case 2: {
-                    System.out.println("Nhập email");
-                    String newEmail = sc.nextLine();
-                    Pattern pattern = Pattern.compile("^[a-zA-Z][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$");
-                    if (Pattern.matches(String.valueOf(pattern), newEmail) == true) {
-                        System.out.println(newEmail);
-                    } else {
-                        System.out.println("email không hợp lệ mời nhập lại");
-                    }
                     ArrayList<User> newUser = new ArrayList<>();
                     for (int i = 0; i < 1000; i++) {
                         System.out.println("Thêm email user mới");
                         String setEmail = sc.nextLine();
+                        try {
+                            File file=new File("list-user.json");
+                            InputStream is=new FileInputStream(file);
+                            ObjectInputStream ois=new ObjectInputStream(is);
+
+                            User userData=(User) ois.readObject();
+                            ArrayList<String> emailData=new ArrayList<>();
+                            emailData.add(userData.getEmail());
+                            for (int j=0;j<emailData.size();j++){
+                                Pattern pattern = Pattern.compile("^[a-zA-Z][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$");
+                                if (Pattern.matches(String.valueOf(pattern), setEmail) == true&&setEmail!=emailData.get(j)) {
+                                    System.out.println(setEmail);
+                                } else {
+                                    System.out.println("email không hợp lệ mời nhập lại");
+                                }
+                            }
+                            ois.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         System.out.println("Thêm password user mới");
                         String setPassword = sc.nextLine();
+                        if (setPassword.length()>=7&&setPassword.length()<=15){
+                            System.out.println(setPassword);
+                        }else {
+                            System.out.println("password không hợp lệ mời nhập lại");
+                        }
+
                         System.out.println("Thêm username mới");
                         String setUsername = sc.nextLine();
-
                         sc.nextLine();
+
                         newUser.add(new User(setEmail, setPassword, setUsername));
                         convertObjectToJsonFile("list-user.json", newUser);
                     }
@@ -126,13 +152,27 @@ public class Main {
                 case 3: {
                     System.out.println("Nhập email đã đăng kí");
                     String createdEmail = sc.nextLine();
-                    Pattern pattern = Pattern.compile("^[a-zA-Z][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$");
-                    if (Pattern.matches(String.valueOf(pattern), createdEmail) == true) {
-                        System.out.println(createdEmail);
-                        int n = (int) (Math.random() * 10);
-                        System.out.println("password mới của bạn là: " + "A" + n + "bd" + n);
-                    } else {
-                        System.out.println("email không hợp lệ mời nhập lại");
+                    try {
+                        File file=new File("list-user.json");
+                        InputStream is=new FileInputStream(file);
+                        ObjectInputStream ois=new ObjectInputStream(is);
+
+                        User userData=(User) ois.readObject();
+                        ArrayList<String> emailData=new ArrayList<>();
+                        emailData.add(userData.getEmail());
+                        for (int i=0;i<emailData.size();i++){
+                            Pattern pattern = Pattern.compile("^[a-zA-Z][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$");
+                            if (Pattern.matches(String.valueOf(pattern), createdEmail) == true&&emailData.get(i).equals(createdEmail)) {
+                                System.out.println(createdEmail);
+                                int n = (int) (Math.random() * 10);
+                                System.out.println("password mới của bạn là: " + "A" + n + "bd" + n);
+                            } else {
+                                System.out.println("email không hợp lệ mời nhập lại");
+                            }
+                        }
+                        ois.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     break;
                 }
