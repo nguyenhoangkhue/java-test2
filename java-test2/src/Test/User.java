@@ -1,5 +1,4 @@
 package Test;
-import com.google.gson.annotations.SerializedName;
 
 public class User {
     private String email;
@@ -37,5 +36,4 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-    @SerializedName("email")
 }
