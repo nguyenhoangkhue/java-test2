@@ -169,7 +169,7 @@ public class Main {
                             if (Pattern.matches(String.valueOf(pattern), createdEmail) == true&&emailData.get(i).equals(createdEmail)) {
                                 System.out.println(createdEmail);
                                 int n = (int) (Math.random() * 10);
-                                String recoveredPassword="A" + n + "bd" + n
+                                String recoveredPassword="A" + n + "bd" + n;
                                 System.out.println("password mới của bạn là: "+recoveredPassword);
                                 convertObjectToJsonFile("list-user.json", recoveredPassword);
                             } else {
