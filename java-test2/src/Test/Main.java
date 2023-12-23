@@ -42,10 +42,11 @@ public class Main {
                         ObjectInputStream ois=new ObjectInputStream(is);
 
                         User userData=(User) ois.readObject();
-                        ArrayList<String> emailData=new ArrayList<>();
-                        emailData.add(userData.getEmail());
-                        for (int i=0;i<emailData.size();i++){
-                            if (emailData.get(i).equals(email)&&emailData.get(i).equals(password)){
+                        ArrayList<String> data=new ArrayList<>();
+                        data.add(userData.getEmail());
+                        data.add(userData.getPassword());
+                        for (int i=0;i<data.size();i++){
+                            if (data.get(i).equals(email)&&data.get(i).equals(password)){
                                 while(true){
                                     System.out.println("Chào mừng "+userData.getUsername()+ ", bạn có thể thực hiện các công việc sau:");
                                     System.out.println("Enter a: Thay đổi username");
