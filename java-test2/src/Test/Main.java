@@ -60,6 +60,7 @@ public class Main {
                                             System.out.println("Nhập username mới");
                                             String newUsername=sc.nextLine();
                                             System.out.println("Đã thay đổi usename thành: "+newUsername);
+                                            convertObjectToJsonFile("list-user.json", newUsername);
                                             break;
                                         }
                                         case "b":{
@@ -68,6 +69,7 @@ public class Main {
                                             for (int j=0;j<arrUser.size();j++){
                                                 if (arrUser.get(j).getEmail()!=changedEmail){
                                                     System.out.println("Đã thay đổi email thành: "+changedEmail);
+                                                    convertObjectToJsonFile("list-user.json", changedEmail);
                                                 }else {
                                                     System.out.println("Đổi email không thành công");
                                                 }
@@ -79,6 +81,7 @@ public class Main {
                                             String changedPassword=sc.nextLine();
                                             if (changedPassword.length()>=7&&changedPassword.length()<=15){
                                                 System.out.println("Đã thay đổi email thành: "+changedPassword);
+                                                convertObjectToJsonFile("list-user.json", changedPassword);
                                             }else {
                                                 System.out.println("password không hợp lệ mời nhập lại");
                                             }
@@ -166,7 +169,9 @@ public class Main {
                             if (Pattern.matches(String.valueOf(pattern), createdEmail) == true&&emailData.get(i).equals(createdEmail)) {
                                 System.out.println(createdEmail);
                                 int n = (int) (Math.random() * 10);
-                                System.out.println("password mới của bạn là: " + "A" + n + "bd" + n);
+                                String recoveredPassword="A" + n + "bd" + n
+                                System.out.println("password mới của bạn là: "+recoveredPassword);
+                                convertObjectToJsonFile("list-user.json", recoveredPassword);
                             } else {
                                 System.out.println("email không hợp lệ mời nhập lại");
                             }
